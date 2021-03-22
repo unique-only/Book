@@ -258,3 +258,97 @@ Java中的byte，short，char进行计算时都会提升为int类型
 答案："123", 0
 
 这道题的答案应该是: D,序列化保存的是对象的状态，静态变量属于类的状态，因此，序列化并不保存静态变量。所以i是没有改变的
+
+
+
+![image-20210319195023811](javase.assets/image-20210319195023811.png)
+
+this不能在static的方法中使用~原来如此。深究了一下原因：this是指向**对象的的引用**，而静态方法在类加载的时候创建加载，此时没有创建对象 。就算声明在Test t=new Test（）后面，this也不是指t，this是指当前的类，静态方法属于类
+
+
+
+## String类型
+
+![image-20210319201020647](javase.assets/image-20210319201020647.png)
+
+```java
+String test="javaandpython"; 
+String str1="java"; 
+String str2="and"; 
+String str3="python"; 
+System. out. println(test=="java"+"and"+"python"): //true
+System. out. println(test ==str1 + str2 + str3);//false
+```
+
+对于上面这段代码，结果是true false
+
+这是因为字符串字面量拼接操作是在Java编译器**编译期间**就执行了，也就是说编译器编译时，直接把"java"、"and"和"python"这三个字面量进行"+"操作得到一个"javaandpython" 常量，并且直接将这个常量放入字符串池中，这样做实际上是一种优化，将**3个字面量合成一个**，避免了创建多余的字符串对象（只有一个对象"javaandpython"，在字符串常量池中）。而字符串引用的"+"运算是在Java运行期间执行的，即str1 + str2 + str3在**程序执行期间**才会进行计算，它会在**堆内存**中重新创建一个拼接后的字符串对象。且在**字符串常量池**中**也会有**str1,str2与str3，这里创建多少个新的对象与原来字符串常量池中有没有str1\str2\str3有关，如果之前存在就不会创建新的对象。
+
+总结来说就是：字面量"+"拼接是在编译期间进行的，拼接后的字符串存放在字符串池中；而字符串引用的"+"拼接运算实在运行时进行的，新创建的字符串存放在堆中。
+
+
+
+
+
+.class 编译后的Java文件 
+.java是未编译的程序 
+.jsp是页面程序 
+.xml配置程序 
+.jar是.calss的集合
+
+
+
+
+
+```java
+public class Test{
+static{
+   int x=5;
+}
+static int x,y;
+public static void main(String args[]){
+   x--;
+   myMethod( );
+   System.out.println(x+y+ ++x);
+}
+public static void myMethod( ){
+  y=x++ + ++x;
+ }
+}
+
+```
+
+![image-20210322194627651](javase.assets/image-20210322194627651.png)
+
+
+
+
+
+| **类 修饰符**         |                                    |
+| --------------------- | ---------------------------------- |
+| Public                | 可以从其他类中访问                 |
+| Abstract              | 本类不能被实例化                   |
+| Final                 | 不能再声明子类                     |
+| **构造函数修饰符**    |                                    |
+| Public                | 可以从所有的类中访问               |
+| Protected             | 只能从自己的类和它的子类中访问     |
+| Private               | 只能在本类中访问                   |
+| **域/成员变量修饰符** |                                    |
+| Public                | 可以从所有的类中访问               |
+| Protected             | 只能从本类和它的子类中访问         |
+| Private               | 只能从本类中访问它                 |
+| Static                | 对该类的所有实例只能有一个域值存在 |
+| transient             | 不是一个对象持久状态的一部份       |
+| Volatile              | 可以被异步的线程所修改             |
+| final                 | 必须对它赋予初值并且不能修改它     |
+| **局部变量 修饰符**   |                                    |
+| final                 | 必须对它赋予初值并且不能修改它     |
+| **方法修饰符**        |                                    |
+| Public                | 可以从所有的类中访问它             |
+| Protected             | 只能从本类及其子类中访问它         |
+| Private               | 只能从本类中访问它                 |
+| abstract              | 没有方法体，属于一个抽象类         |
+| final                 | 子类不能覆盖它                     |
+| static                | 被绑定于类本身而不是类的实例       |
+| native                | 该方法由其他编程语言实现           |
+| asnchronized          | 在一个线程调用它之前必须先给它加   |
