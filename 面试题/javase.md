@@ -352,3 +352,37 @@ public static void myMethod( ){
 | static                | 被绑定于类本身而不是类的实例       |
 | native                | 该方法由其他编程语言实现           |
 | asnchronized          | 在一个线程调用它之前必须先给它加   |
+
+![image-20210323145203687](javase.assets/image-20210323145203687.png)
+
+
+
+
+
+
+
+```java
+class Base{
+    public Base(String s){
+        System.out.print("B");
+    }
+}
+public class Derived extends Base{
+    public Derived (String s) {
+        System.out.print("D");
+    }
+    public static void main(String[] args){
+        new Derived("C");
+    }
+}
+
+编译错误
+```
+
+```
+子类构造方法在调用时必须先调用父类的，由于父类没有无参构造，必须在子类中显式调用，修改子类构造方法如下即可：
+public` `Derived(String s){
+    ``super``(``"s"``);
+    ``System.out.print(``"D"``);
+  ``}
+```
